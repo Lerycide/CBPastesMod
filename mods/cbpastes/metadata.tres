@@ -1,0 +1,19 @@
+[gd_resource type="Resource" load_steps=3 format=2]
+
+[ext_resource path="res://mods/cbpastes/mod.gd" type="Script" id=1]
+[ext_resource path="res://mods/cbpastes/translations/cbpastes_translations.en.translation" type="Translation" id=2]
+
+[resource]
+script = ExtResource( 1 )
+id = "cb_pastes"
+name = "CB Pastes"
+version_code = 1
+version_string = "0.1.1"
+author = "Lerycide"
+save_file_format_tag = ""
+save_file_format_tag_version = 0
+network_protocol_tag = ""
+disable_network_multiplayer = false
+modified_files = [ "res://menus/party/PartyMenu.gd", "res://menus/tape_storage/TapeStorageMenu.gd", "res://menus/party_tape/PartyTapeUI.gd", "res://nodes/menus/InputMappedButton.gd" ]
+modified_dirs = [  ]
+translations = [ ExtResource( 2 ) ]

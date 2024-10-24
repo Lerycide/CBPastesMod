@@ -1,0 +1,41 @@
+keys,en
+CBPASTE_PASTE_TITLE,Insert Paste
+CBPASTE_EXPORT_MENU_TITLE,Paste Export Settings
+CBPASTE_EXPORT_MODE,Export Mode
+CBPASTE_EXPORT_MODE_TEAM,Current Team
+CBPASTE_EXPORT_MODE_STORAGE,Tape Storage
+CBPASTE_EXPORT_FORMATTING,Paste Format
+CBPASTE_EXPORT_FORMATTING_PLAIN,Plain Text
+CBPASTE_EXPORT_FORMATTING_MARKDOWN,Markdown
+CBPASTE_EXPORT_FORMATTING_HTML,HTML
+CBPASTE_EXPORT_FORMATTING_BBCODE,BBCode
+CBPASTE_EXPORT_NICKNAMES,Export Nicknames
+CBPASTE_EXPORT_GRADE,Export Tape Grade
+CBPASTE_EXPORT_ATTRIBUTES,Export Attributes
+CBPASTE_EXPORT_SKIP_EMPTY,Skip Empty Slots
+CBPASTE_EXPORT_ACCEPT,Export Paste
+CBPASTE_EXPORT_HINT_TEAM,"[Current Team]: Exports a paste for the current team and copies them to clipboard if applicable.
+[Tape Storage]: Exports the paste from storage. Always saves the text file externally."
+CBPASTE_EXPORT_HINT_FORMAT,"[Plain Text]: Plain text format.
+[Markdown]: Plain text inside a code block, used for Markdown or Discord.
+[BBCode]: BBCode with colour formatting.
+[HTML]: Always exports as an HTML file with colour formatting."
+CBPASTE_EXPORT_HINT_NICKNAMES,Suppresses tape nicknames when exporting paste.
+CBPASTE_EXPORT_HINT_GRADE,Treats the tape as being 5 stars and suppresses grade when exporting paste.
+CBPASTE_EXPORT_HINT_ATTRIBUTES,Includes attributes in the exported paste.
+CBPASTE_EXPORT_HINT_SKIP_EMPTY,Skips empty slots in the exported paste.
+CBPASTE_EXPORT_CLIPBOARD,Paste copied to clipboard.
+CBPASTE_EXPORT_FILE,Paste successfully exported.
+CBPASTE_EXPORT_PROGRESS_EXPORTING,Exporting tapes...
+CBPASTE_EXPORT_PROGRESS_DONE,Export complete!
+CBPASTE_EXPORT_BUTTON,Export Paste
+CBPASTE_MASS_EXPORT,Mass Export Pastes
+CBPASTE_OPTION_COPY_CLIPBOARD,Copy to Clipboard
+,
+CBPASTE_SINGLE_EXPORT_HINT_FORMAT,"[Plain Text]: Plain text format.
+[Markdown]: Plain text inside a code block, used for Markdown or Discord.
+[BBCode]: BBCode with colour formatting.
+[HTML Snippet]: HTML snippet with colour formatting.
+[HTML Standalone]: Always exports as an HTML file."
+CBPASTE_SINGLE_EXPORT_HTML_SNIPPET,HTML Snippet
+CBPASTE_SINGLE_EXPORT_HTML_STANDALONE,HTML Standalone
