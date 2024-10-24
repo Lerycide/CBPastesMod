@@ -39,7 +39,7 @@ const MOVE_NAME_CONVERSIONS: Dictionary = {
 	"be_random!!!": "be_random",
 	"bish_bash_bosh": "bishbashbosh",
 	"bush_fire": "bushfire",
-	"clock_work_mous": "clockwork_mouse",
+	"clock_work_mouse": "clockwork_mouse",
 	"cm": "critical_mass",
 	"complement": "compliment",
 	"copy_cat": "copycat",
@@ -61,21 +61,16 @@ const MOVE_NAME_CONVERSIONS: Dictionary = {
 	"life_absorb": "hp_absorb",
 	"lift_off": "liftoff",
 	"mc": "machine_curse",
-	"mind-meld": "mind_meld",
 	"multi_copy": "multicopy",
-	"multi-shot": "multi_shot",
 	"multishot": "multi_shot",
-	"multi-smack": "multi_smack",
 	"multismack": "multi_smack",
 	"neutralize": "neutralise",
 	"polevault_assault": "pole_vault_assault",
-	"pre-emptive_strike": "preemptive_strike",
+	"pre_emptive_strike": "preemptive_strike",
 	"qs": "quick_smack",
 	"rs": "random_starter",
 	"rf": "rapid_fire",
 	"sand_storm": "sandstorm",
-	"self-assured": "self_assured",
-	"self-destruct": "self_destruct",
 	"selfdestruct": "self_destruct",
 	"sharp_edge": "sharp_edges",
 	"sheer_luck": "starter2_passive",
@@ -91,7 +86,6 @@ const MOVE_NAME_CONVERSIONS: Dictionary = {
 	"sturdy_armor": "sturdy_armour",
 	"old_1-2": "the_old_1_2",
 	"old_1_2": "the_old_1_2",
-	"the_old_1-2": "the_old_1_2",
 	"trapjaw": "trap_jaw",
 	"trip_wire": "tripwire",
 	"twoheads": "two_heads",
@@ -433,7 +427,7 @@ static func generate_movesets(moves_match_array:Array, tape:MonsterTape, check_l
 static func format_move(move_name:String):
 	# properly formats the move into a usable key string
 	move_name = Strings.strip_diacritics(move_name)
-	move_name = move_name.replace(" ", "_").to_lower()
+	move_name = move_name.replace(" ", "_").replace("-", "_").to_lower()
 	if move_name in MOVE_NAME_CONVERSIONS:
 		return MOVE_NAME_CONVERSIONS[move_name]
 	return move_name
