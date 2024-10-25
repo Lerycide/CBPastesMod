@@ -375,7 +375,7 @@ static func import_paste(paste:String, check_legality:bool = true) -> MonsterTap
 		tape.upgrade_to(grade, null, true)
 	else:
 		tape.upgrade_to(5, null, true)
-
+	tape.stickers = []
 
 	# sets the tape's moves
 	var moves_regex = RegEx.new()
