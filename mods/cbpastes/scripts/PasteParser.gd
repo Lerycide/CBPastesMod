@@ -149,6 +149,7 @@ const MOVE_NAME_CONVERSIONS: Dictionary = {
 	"ice_resistance"		: "resistance_ice",
 	"lightning_resistance"	: "resistance_lightning",
 	"grounded"				: "resistance_lightning",
+	"metal_resistance"		: "resistance_metal",
 	"plant_resistance"		: "resistance_plant",
 	"plastic_resistance"	: "resistance_plastic",
 	"poison_resistance"		: "resistance_poison",

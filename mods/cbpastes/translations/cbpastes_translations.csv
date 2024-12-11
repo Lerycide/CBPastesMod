@@ -39,3 +39,6 @@ CBPASTE_SINGLE_EXPORT_HINT_FORMAT,"[Plain Text]: Plain text format.
 [HTML Standalone]: Always exports as an HTML file."
 CBPASTE_SINGLE_EXPORT_HTML_SNIPPET,HTML Snippet
 CBPASTE_SINGLE_EXPORT_HTML_STANDALONE,HTML Standalone
+CBPASTE_IMPORT_SWAP_PARTY_CONFIRM,Swap imported tapes to the party? The swapped out tapes will be sent to storage.
+CBPASTE_IMPORT_SWAP_PARTY_SUCCESS,Tapes have been imported and swapped.
+CBPASTE_IMPORT_MASS_SUCCESS,Tapes have been imported and sent to storage.
