@@ -5,6 +5,8 @@ const EMPTY_STICKER = "<Empty Slot>"
 
 enum EXPORT_FORMAT{PlainText,Markdown,HTML}
 
+const Conversions = preload("res://mods/cbpastes/scripts/StringConversions.gd")
+
 const COLORS = {
 	"misc": "#777777",
 	"air": "#206454",
@@ -21,142 +23,12 @@ const COLORS = {
 	"plastic": "#b12031",
 	"poison": "#7629db",
 	"water": "#4648ce",	
-	"typeless": "#000000"
+	"typeless": "#000000",
+	"common": "#000000",
+	"uncommon": "#225d31",
+	"rare": "#35379d",
 }
 
-# converts them to a form matching resource names
-const MOVE_NAME_CONVERSIONS: Dictionary = {
-	"<empty_slot>": "_empty_slot",
-	"empty_slot": "_empty_slot",
-	"empty_slot_-": "_empty_slot",
-	"empty_slot-": "_empty_slot",
-	"<_empty_slot_>": "_empty_slot",
-	"-empty_slot-": "_empty_slot",
-	"-_empty_slot_-": "_empty_slot",
-	"emptyslot": "_empty_slot",
-	"be_random!": "be_random",
-	"be_random!!": "be_random",
-	"be_random!!!": "be_random",
-	"bish_bash_bosh": "bishbashbosh",
-	"bush_fire": "bushfire",
-	"clock_work_mouse": "clockwork_mouse",
-	"cm": "critical_mass",
-	"complement": "compliment",
-	"copy_cat": "copycat",
-	"copythat": "copy_that",
-	"cottoned_on": "cotton_on",
-	"crit_ap": "critical_ap",
-	"criticise": "criticize",
-	"cs": "custom_starter",
-	"deja_vu": "dejavu",
-	"de_ja_vu": "dejavu",
-	"djinn_toxicate": "djinntoxicate",
-	"echolocate": "echolocation",
-	"gem_stone_wall": "gemstone_wall",
-	"hypnotise": "hypnotize",
-	"ionized_air": "ionised_air",
-	"iron_fillings": "iron_filings",
-	"jagged_edges": "jagged_edge",
-	"jumpscare": "jump_scare",
-	"life_absorb": "hp_absorb",
-	"lift_off": "liftoff",
-	"mc": "machine_curse",
-	"multi_copy": "multicopy",
-	"multishot": "multi_shot",
-	"multismack": "multi_smack",
-	"neutralize": "neutralise",
-	"polevault_assault": "pole_vault_assault",
-	"pre_emptive_strike": "preemptive_strike",
-	"qs": "quick_smack",
-	"rs": "random_starter",
-	"rf": "rapid_fire",
-	"sand_storm": "sandstorm",
-	"selfdestruct": "self_destruct",
-	"sharp_edge": "sharp_edges",
-	"sheer_luck": "starter2_passive",
-	"shear_luck": "starter2_passive",
-	"spring_loaded": "spring_load",
-	"sitd": "stab_in_the_dark",
-	"status_res": "status_resistance",
-	"bonbon_blast": "starter1_attack",
-	"bon_bon_blast": "starter1_attack",
-	"battering_ram": "starter2_attack",
-	"sugar_rush": "starter1_passive",
-	"super_heated_fist": "superheated_fist",
-	"sturdy_armor": "sturdy_armour",
-	"old_1-2": "the_old_1_2",
-	"old_1_2": "the_old_1_2",
-	"trapjaw": "trap_jaw",
-	"trip_wire": "tripwire",
-	"twoheads": "two_heads",
-	"tower_defense": "tower_defence",
-	"water_works": "waterworks",
-	"wonderful_seven": "wonderful_7",
-	"w7": "wonderful_7",
-	"wood_cutter": "woodcutter",
-
-	"air_camouflage"		: "camouflage_air",
-	"air_camo"				: "camouflage_air",
-	"astral_camouflage"		: "camouflage_astral",
-	"astral_camo"			: "camouflage_astral",
-	"beast_camouflage"		: "camouflage_beast",
-	"beast_camo"			: "camouflage_beast",
-	"earth_camouflage"		: "camouflage_earth",
-	"earth_camo"			: "camouflage_earth",
-	"fire_camouflage"		: "camouflage_fire",
-	"fire_camo"				: "camouflage_fire",
-	"glass_camouflage"		: "camouflage_glass",
-	"glass_camo"			: "camouflage_glass",
-	"ice_camouflage"		: "camouflage_ice",
-	"ice_camo"				: "camouflage_ice",
-	"lightning_camouflage"	: "camouflage_lightning",
-	"lightning_camo"		: "camouflage_lightning",
-	"metal_camouflage"		: "camouflage_metal",
-	"metal_camo"			: "camouflage_metal",
-	"plant_camouflage"		: "camouflage_plant",
-	"plant_camo"			: "camouflage_plant",
-	"plastic_camouflage"	: "camouflage_plastic",
-	"plastic_camo"			: "camouflage_plastic",
-	"poison_camouflage"		: "camouflage:poison",
-	"poison_camo"			: "camouflage:poison",
-	"water_camouflage"		: "camouflage:water",
-	"water_camo"			: "camouflage:water",	
-
-	"air_coating"		: "coating_air",
-	"astral_coating"	: "coating_astral",
-	"beast_coating"		: "coating_beast",
-	"earth_coating"		: "coating_earth",
-	"elemental_coating"	: "coating_elemental",
-	"fire_coating"		: "coating_fire",
-	"glass_coating"		: "coating_glass",
-	"ice_coating"		: "coating_ice",
-	"lightning_coating"	: "coating_lightning",
-	"metal_coating"		: "coating_metal",
-	"plant_coating"		: "coating_plant",
-	"plastic_coating"	: "coating_plastic",
-	"poison_coating"	: "coating_poison",
-	"water_coating"		: "coating_water",
-
-	"air_resistance"		: "resistance_air",
-	"astral_resistance"		: "resistance_astral",
-	"beast_resistance"		: "resistance_beast",
-	"earth_resistance"		: "resistance_earth",
-	"fire_resistance"		: "resistance_fire",
-	"fireproof"				: "resistance_fire",
-	"fire_proof"			: "resistance_fire",
-	"glass_resistance"		: "resistance_glass",
-	"glitter_resistance"	: "resistance_glitter",
-	"ice_resistance"		: "resistance_ice",
-	"lightning_resistance"	: "resistance_lightning",
-	"grounded"				: "resistance_lightning",
-	"metal_resistance"		: "resistance_metal",
-	"plant_resistance"		: "resistance_plant",
-	"plastic_resistance"	: "resistance_plastic",
-	"poison_resistance"		: "resistance_poison",
-	"water_resistance"		: "resistance_water",
-	"waterproof"			: "resistance_water",
-	"water_proof"			: "resistance_water",
-}
 
 const HTML_HEAD = """<!DOCTYPE html>
 <html lang="en">
@@ -263,6 +135,10 @@ static func fancy_format_move(move:BattleMove, type:ElementalType, args:Dictiona
 				return output
 
 	output = "- " + Strings.strip_diacritics(Loc.tr(move.name))
+	var attributes_text:String = ""
+
+	if args.get("include_attributes", true) and move.attributes.size() > 0:
+		attributes_text = fancy_format_attributes(move, args)
 
 	var id:String = "typeless"
 	if move.elemental_types.size() > 0:
@@ -270,15 +146,105 @@ static func fancy_format_move(move:BattleMove, type:ElementalType, args:Dictiona
 	elif type:
 		id = type.id
 	
-	match args.get("format", ""):
-		"bbcode":
-			return "[color=%s]%s[/color]" % [COLORS[id], output]
-		"html":
-			return "<div style='color: %s;'>%s</div>" % [COLORS[id], output]
-		_:
-			pass
+	if args.get("include_attributes", true):
+		match args.get("format", ""):
+			"bbcode":
+				return "[color=%s]%s[/color]\n\t%s" % [COLORS[id], output, attributes_text]
+			"markdown":
+				return "%s\n\t%s" % [output, attributes_text]
+			"html":
+				return "<div style='color: %s;'>%s<br><span style='color: black;'>&nbsp;&nbsp;&nbsp;&nbsp;%s</span></div>" % [COLORS[id], output, attributes_text]
+				#return "<div style='color: %s;'>%s<br><span style='color: black; margin-left: 40px;'>%s</span></div>" % [COLORS[id], output, attributes_text]
+			_:
+				return "%s %s" % [output, attributes_text]
+	else:
+		match args.get("format", ""):
+			"bbcode":
+				return "[color=%s]%s[/color]" % [COLORS[id], output]
+			"html":
+				return "<div style='color: %s;'>%s</div>" % [COLORS[id], output]
+			_:
+				pass
 	return output
 
+
+static func fancy_format_attributes(move:BattleMove, args:Dictionary, output := "") -> String:
+	if move.attributes.size() == 0:
+		return ""
+	output = "["
+	for attribute in move.attributes:
+		var data:Dictionary = create_data_from_attribute(attribute)
+		var attr_string:String = string_format_attribute(data)
+		match args.get("format", ""):
+			"bbcode":
+				attr_string = "[color=%s]%s[/color]" % [COLORS[data.rarity], attr_string]
+			"html":
+				attr_string = "<span style='color: %s;'>%s</span>" % [COLORS[data.rarity], attr_string]
+			_:
+				pass
+		output += "%s | " % attr_string
+	output = output.trim_suffix(" | ") + "]"
+	return output
+
+
+static func string_format_attribute(attr_data:Dictionary, output := ""):
+	assert ("key" in attr_data)
+	assert (attr_data.key != "")
+	
+	output = "%s %s %s" % [
+		attr_data.key,
+		attr_data.get("modifier", ""),
+		string_format_attr_value(attr_data.get("value", -1), attr_data.get("is_empty", false))
+	]
+	output = reduce_spaces(output).strip_edges(false, true)
+	return output
+
+
+static func string_format_attr_value(value:int, is_empty:bool) -> String:
+	if value < 0:
+		return ""
+	if is_empty:
+		return "%s+" % value	
+	return str(value)
+
+
+
+static func create_data_from_attribute(attribute:StickerAttribute) -> Dictionary:
+	var internal_name:String = Datatables.get_db_key(attribute.template_path)
+	var is_empty:bool = false
+	if internal_name.begins_with("specialization_"):
+		is_empty = true
+		internal_name = internal_name.trim_prefix("specialization_") 
+	elif internal_name.begins_with("stat_"):
+		internal_name = internal_name.trim_prefix("stat_") 
+	if not (internal_name in Conversions.ATTRIBUTE_TO_KEYS):
+		print("ERROR WITH %s" % internal_name)
+		assert (true == false)
+	var data:Dictionary = Conversions.ATTRIBUTE_TO_KEYS[internal_name].duplicate()
+
+	if data.key == "Buff":
+		data.modifier = get_status_name(attribute.buff)
+	elif data.key == "Debuff":
+		data.modifier = get_status_name(attribute.debuff)
+
+	data.is_empty = is_empty
+	data.value = get_value_attribute(attribute)
+	match attribute.rarity:
+		1:
+			data.rarity = "uncommon"
+		2:
+			data.rarity = "rare"
+		_:
+			data.rarity = "common"
+	return data
+
+
+static func get_status_name(status:StatusEffect) -> String:
+	var status_name:String = Strings.strip_diacritics(Loc.tr(status.get_name()))
+	if status_name in Conversions.STATUS_CONTRACTIONS:
+		status_name = Conversions.STATUS_CONTRACTIONS[status_name]
+	status_name = status_name.replace("-", "").replace(" ", "")
+	return status_name
 
 # used for formattng the header (species name + bootleg type)
 static func assign_header(species_name:String, type_name:String, args:Dictionary = {}) -> String:
@@ -345,16 +311,20 @@ static func import_paste(paste:String, check_legality:bool = true) -> MonsterTap
 		push_error("No species recognized in the first line of the paste. Check if this is a formatting error.")
 		return null
 	
-	var species_name = name_result.strings[1].replace(" ", "_").to_lower()
+	var species_name = reduce_spaces(name_result.strings[1])
+	species_name = species_name.replace(" ", "_").to_lower()
+	
 	var form = MonsterForms.get_from_key(species_name, false)
 	if not form:
 		push_error("No species recognized in the first line of the paste. Check if this is a formatting error.")
 		return null
+
 	tape.form = form
 	if name_result.strings.size() > 2:
 		var type_id:String = name_result.strings[2].to_lower()
 		var types = Datatables.load("res://data/elemental_types/").table
 		if type_id != "" and not types.has(type_id):
+			report_import_error()
 			push_warning("Invalid bootleg type %s" % name_result.strings[2])
 		if types.has(type_id):
 			tape.type_override = [types[type_id]]
@@ -380,59 +350,260 @@ static func import_paste(paste:String, check_legality:bool = true) -> MonsterTap
 
 	# sets the tape's moves
 	var moves_regex = RegEx.new()
-	moves_regex.compile("(?m)^(?:- *)(.*?)(?:\\s*)$")
+	moves_regex.compile("(?m)^(?:- *)(\\w[\\w-]+(?: +\\w+)*)\\s*(?:\\[([\\w+][^|]*?)(?: *?\\| *?([\\w+][^|]*?)(?: *?\\| *?([\\w+][^|]*?) *?)?)?\\])?$")
+	#moves_regex.compile("(?m)^(?:- *)(\\w[\\w-]+(?: \\w+)*)(?: \\[([\\w+][^|]*?)(?: *?\\| *?([\\w+][^|]*?)(?: *?\\| *?([\\w+][^|]*?) *?)?)?\\])?$")
+	#moves_regex.compile("(?m)^(?:- *)(.*?)(?:\\s*)$")
 	var moves_results = moves_regex.search_all(paste)
 	if moves_results:
-		tape.stickers = generate_movesets(moves_results, tape, check_legality)
+		tape.stickers = generate_movesets(moves_results, tape)
+	if check_legality:
+		var imported_stickers_size = tape.stickers.size()
+		tape.fix_slot_overflow(true)
+		if imported_stickers_size > tape.stickers.size():
+			push_warning("Some stickers were removed from tape %s for exceeding the slot limit" % [Loc.tr(tape.get_name())])
+			report_import_error()
+		for j in range(tape.stickers.size()):
+			var move = tape.get_move(j)
+			if move and not BattleMoves.is_compatible(tape, move):
+				tape.peel_sticker(j)
+				push_warning("Sticker %s is not compatible with tape %s" % [Loc.tr(tape.get_name()), Loc.tr(move.get_name())])
+				report_import_error()
 	return tape
 
 
-static func generate_movesets(moves_match_array:Array, tape:MonsterTape, check_legality:bool)->Array:
+static func generate_movesets(moves_match_array:Array, tape:MonsterTape)->Array:
 	if not tape:
 		return []
 	
 	var moves_override_list = []
-	var max_slots:int = tape.get_stat("move_slots", false)
 	
 	for move_match in moves_match_array:
 		if not move_match is RegExMatch:
 			continue
 		var move_name = format_move(move_match.strings[1])
 		if move_name == "_empty_slot":
-			if check_legality and moves_override_list.size() >= max_slots:
-				push_warning("Move %s cannot be added as it exceeds the sticker slot limit" % move_name)
-				continue
-			else:
-				moves_override_list.push_back(null)
-		
+			moves_override_list.push_back(null)
+			continue
 		if not move_name in BattleMoves.by_id:
 			push_warning("Move %s does not match any move" % move_name)
+			report_import_error()
 			continue
 		var move = BattleMoves.by_id[move_name]
 		if not BattleMoves.can_be_sticker(move):
+			push_warning("Move %s does not match any move" % move_name)
+			report_import_error()
 			continue
-		if check_legality:
-			if not BattleMoves.is_compatible(tape, move):
-				push_warning("Move %s is not compatible with tape" % move_name)
-				continue
-			if moves_override_list.size() >= max_slots:
-				push_warning("Move %s cannot be added as it exceeds the sticker slot limit" % move_name)
-				continue
 		var sticker = StickerItem.new()
 		sticker.battle_move = move
+		
+		if move_match.strings.size() > 2:
+			var attributes:Array = move_match.strings.slice(2, move_match.strings.size() - 1)
+			var attributes_list:Array = []
+			for attribute in attributes:
+				var attr = generate_attribute(move, attribute)
+				if attr != null:
+					attributes_list.push_back(attr)
+			sticker.attributes = attributes_list
 		moves_override_list.push_back(sticker)
 	
 	return moves_override_list
-		
 
-static func format_move(move_name:String):
+
+static func generate_attribute(move:BattleMove, attribute_string:String):
+	# parses the given: AttributeKey Modifier Number
+	# assumes that the regex match has already been sliced
+	var attr_string_array:Array = attribute_string.split(" ", false)
+	if attr_string_array.size() == 0:
+		return null
+	var data:Dictionary = create_attribute_data(attr_string_array)
+	if not data.attribute_name in Conversions.ATTRIBUTES:
+		push_warning("Invalid attribute name %s" % data.attribute_name)
+		report_import_error()
+		return null
+
+	var result = Conversions.ATTRIBUTES[data.attribute_name]
+	var attribute:StickerAttribute
+
+	if result is StickerAttribute:
+		attribute = result.instance()
+		if not attribute.is_applicable_to(move):
+			push_warning("Attribute %s is not compatible with move" % [data.attribute_name, Loc.tr(move.get_name())])
+			report_import_error()
+			return null
+		attribute.generate(move, Random.new())
+		set_value_attribute(attribute, data.get("value", 0))
+
+		# special case handling for buff and debuff attributes
+		if attribute.get("buffs") != null:
+			if data.get("modifier_name", "") == "":
+				push_warning("Failed to generate attribute for %s: buff user attribute has no specified status effect" % Loc.tr(move.get_name()))
+				report_import_error()
+				return null
+			var buff_name:String = data.modifier_name
+			if buff_name in Conversions.STATUS_CONVERSIONS:
+				buff_name = Conversions.STATUS_CONVERSIONS[buff_name]
+			if not buff_name in Conversions.STATUSES:
+				push_warning("Failed to generate attribute for %s: invalid status effect name %s" % [Loc.tr(move.get_name()), buff_name])
+				report_import_error()
+				return null
+			var status:StatusEffect = Conversions.STATUSES[buff_name]
+			if not status in attribute.buffs:
+				push_warning("Failed to generate attribute for %s: specified status effect %s is not valid" % [Loc.tr(move.get_name()), buff_name])
+				report_import_error()
+				return null
+			var buff_index = attribute.buffs.find(status)
+			if buff_index < attribute.varied_amounts.size() and buff_index >= 0:
+				attribute.amount = attribute.varied_amounts[buff_index]
+			else:
+				attribute.amount = attribute.default_amount
+		elif attribute.get("debuffs"):
+			if data.get("modifier_name", "") == "":
+				push_warning("Failed to generate attribute for %s: debuff target attribute has no specified status effect" % Loc.tr(move.get_name()))
+				report_import_error()
+				return null
+			var debuff_name:String = data.modifier_name
+			if debuff_name in Conversions.STATUS_CONVERSIONS:
+				debuff_name = Conversions.STATUS_CONVERSIONS[debuff_name]
+			if not debuff_name in Conversions.STATUSES:
+				push_warning("Failed to generate attribute for %s: invalid status effect name %s" % [Loc.tr(move.get_name()), debuff_name])
+				report_import_error()
+				return null
+			var status:StatusEffect = Conversions.STATUSES[debuff_name]
+			if not status in attribute.debuffs:
+				push_warning("Failed to generate attribute for %s: specified status effect %s is not valid" % [Loc.tr(move.get_name()), debuff_name])
+				report_import_error()
+				return null
+			var debuff_index = attribute.debuffs.find(status)
+			if debuff_index < attribute.varied_amounts.size() and debuff_index >= 0:
+				attribute.amount = attribute.varied_amounts[debuff_index]
+			else:
+				attribute.amount = attribute.default_amount
+		return attribute
+
+	elif result is Dictionary:
+		# no modifier means it's a regular vs per empty
+		# so excludes alt attack, auto-use, and passive stats
+		if data.get("modifier_name", "") == "":
+			if not "regular" in result:
+				push_warning("Something went wrong generating attributes for %s: %s" % [Loc.tr(move.get_name()), attribute_string])
+				report_import_error()
+				return null			
+			attribute = result["empty"].instance() if data.is_empty else result["regular"].instance()
+			if not attribute.is_applicable_to(move):
+				push_warning("Attribute %s is not compatible with move" % [data.attribute_name, Loc.tr(move.get_name())])
+				report_import_error()
+				return null
+			attribute.generate(move, Random.new())
+			set_value_attribute(attribute, data.get("value", 0))
+			return attribute
+
+		result = result[data.modifier_name]		
+		# only true for passive stat attributes
+		if result is Dictionary:
+			if not "regular" in result:
+				push_warning("Something went wrong generating attributes for %s: %s" % [Loc.tr(move.get_name()), attribute_string])
+				report_import_error()
+				return null
+			attribute = result["empty"].instance() if data.is_empty else result["regular"].instance()
+			if not attribute.is_applicable_to(move):
+				push_warning("Attribute %s is not compatible with move" % [data.attribute_name, Loc.tr(move.get_name())])
+				report_import_error()
+				return null
+			attribute.generate(move, Random.new())
+			set_value_attribute(attribute, data.get("value", 0))
+			return attribute
+		elif result is StickerAttribute:
+			attribute = result.instance()
+			if not attribute.is_applicable_to(move):
+				push_warning("Attribute %s is not compatible with move" % [data.attribute_name, Loc.tr(move.get_name())])
+				report_import_error()
+				return null
+			attribute.generate(move, Random.new())
+			set_value_attribute(attribute, data.get("value", 0))
+			return attribute
+	return attribute
+
+static func create_attribute_data(string_array:Array, output := {}) -> Dictionary:
+	assert (string_array.size() > 0)
+	output.attribute_name = format_attribute(string_array[0].to_lower())
+
+	if string_array.size() == 1:
+		return output
+			
+	if is_modifier_key(string_array[1]):
+		output.modifier_name = string_array[1].to_lower()
+		if output.modifier_name in Conversions.MODIFIER_CONVERSIONS:
+			output.modifier_name = Conversions.MODIFIER_CONVERSIONS[output.modifier_name]
+	
+	elif string_get_attribute_value(string_array[1]) > 0:
+		output.is_empty = is_empty_slot_scaling(string_array[1])
+		output.value = string_get_attribute_value(string_array[1])
+		return output
+
+	if string_array.size() > 2 and string_get_attribute_value(string_array[2]) > 0:
+		output.is_empty = is_empty_slot_scaling(string_array[2])
+		output.value = string_get_attribute_value(string_array[2])
+	
+	return output
+
+
+static func set_value_attribute(attribute:StickerAttribute, value:int):
+	if "stat_value" in attribute:
+		if value == 0:
+			attribute.stat_value = attribute.stat_value_max
+		else:
+			attribute.stat_value = int(clamp(value, attribute.stat_value_min, attribute.stat_value_max ))
+	elif "chance" in attribute:
+		if value == 0:
+			attribute.chance = attribute.chance_max
+		else:
+			attribute.chance = int(clamp(value, attribute.chance_min, attribute.chance_max))
+
+static func get_value_attribute(attribute:StickerAttribute) -> int:
+	if "stat_value" in attribute:
+		return attribute.stat_value
+	elif "chance" in attribute:
+		return attribute.chance
+	return -1
+
+static func is_modifier_key(value:String) -> bool:
+	# returns false if it's a number-type argument like 20 or 20+
+	if "+" in value or "%" in value:
+		return false
+	return value.to_int() == 0
+
+static func is_empty_slot_scaling(value:String) -> bool:
+	# returns true if it's the per empty slot variant
+	if is_modifier_key(value):
+		return false
+	return "+" in value
+
+static func string_get_attribute_value(string_value:String) -> int:
+	# returns the raw value of the number-type argument itself
+	if is_modifier_key(string_value):
+		return -1
+	string_value = string_value.replace("%", "").trim_suffix("+")
+	return string_value.to_int()
+
+static func reduce_spaces(name:String) -> String:
+	while "  " in name:
+		name = name.replace("  ", " ")
+	return name
+
+static func format_move(move_name:String) -> String:
 	# properly formats the move into a usable key string
-	move_name = Strings.strip_diacritics(move_name)
+	move_name = reduce_spaces(Strings.strip_diacritics(move_name))
 	move_name = move_name.replace(" ", "_").replace("-", "_").to_lower()
-	if move_name in MOVE_NAME_CONVERSIONS:
-		return MOVE_NAME_CONVERSIONS[move_name]
+	if move_name in Conversions.MOVE_NAME_CONVERSIONS:
+		return Conversions.MOVE_NAME_CONVERSIONS[move_name]
 	return move_name
 
+
+static func format_attribute(attr_name:String):
+	if attr_name in Conversions.ATTRIBUTE_NAME_CONVERSIONS:
+		attr_name = Conversions.ATTRIBUTE_NAME_CONVERSIONS[attr_name]
+	return attr_name
+	
 static func sanitize_to_html(text:String) -> String:
 	return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&apos;")
 
@@ -473,3 +644,8 @@ static func export_to_text(contents:Array, path:String = "user://tape_export.md"
 	file.store_string("\n\n".join(contents))
 	file.close()
 	return
+
+static func report_import_error():
+	# keeps tally of importing errors to inform the user later on
+	DLC.mods_by_id["cb_pastes"].import_errors += 1
+
