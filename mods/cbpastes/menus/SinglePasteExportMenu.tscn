@@ -56,27 +56,27 @@ script = ExtResource( 7 )
 material = SubResource( 1 )
 
 [node name="MarginContainer" type="MarginContainer" parent="Scroller/OverscanMarginContainer" index="0"]
-margin_left = 281.0
+margin_left = 172.0
 margin_top = 97.0
-margin_right = 1639.0
+margin_right = 1830.0
 margin_bottom = 983.0
 size_flags_horizontal = 4
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Scroller/OverscanMarginContainer/MarginContainer" index="0"]
-margin_right = 1358.0
+margin_right = 1658.0
 margin_bottom = 886.0
 custom_constants/separation = 40
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer" index="0"]
 margin_right = 618.0
-margin_bottom = 704.0
+margin_bottom = 780.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 custom_constants/separation = 30
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer" index="0"]
 margin_right = 618.0
-margin_bottom = 614.0
+margin_bottom = 690.0
 size_flags_horizontal = 5
 size_flags_vertical = 5
 custom_constants/separation = 0
@@ -96,7 +96,7 @@ align = 1
 [node name="PanelContainer2" type="PanelContainer" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer" index="1"]
 margin_top = 60.0
 margin_right = 618.0
-margin_bottom = 614.0
+margin_bottom = 690.0
 custom_styles/panel = SubResource( 3 )
 
 [node name="RowFocusIndicator" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/PanelContainer2" index="0" instance=ExtResource( 2 )]
@@ -108,7 +108,7 @@ container_path = NodePath("../MarginContainer/VBoxContainer/InputContainer")
 
 [node name="MarginContainer" type="MarginContainer" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/PanelContainer2" index="1"]
 margin_right = 618.0
-margin_bottom = 554.0
+margin_bottom = 630.0
 rect_clip_content = true
 custom_constants/margin_right = 16
 custom_constants/margin_top = 8
@@ -119,13 +119,13 @@ custom_constants/margin_bottom = 16
 margin_left = 16.0
 margin_top = 8.0
 margin_right = 602.0
-margin_bottom = 538.0
+margin_bottom = 614.0
 rect_pivot_offset = Vector2( 1327.65, 14 )
 custom_constants/separation = 32
 
 [node name="InputContainer" type="GridContainer" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer" index="0"]
 margin_right = 586.0
-margin_bottom = 288.0
+margin_bottom = 364.0
 custom_constants/vseparation = 16
 custom_constants/hseparation = 16
 columns = 2
@@ -158,14 +158,14 @@ value_labels = [ "CBPASTE_EXPORT_FORMATTING_PLAIN", "CBPASTE_EXPORT_FORMATTING_M
 margin_top = 76.0
 margin_right = 438.0
 margin_bottom = 136.0
-hint_tooltip = "CBPASTE_EXPORT_HINT_NICKNAMES"
+hint_tooltip = "CBPASTE_EXPORT_HINT_ATTRIBUTES"
 mouse_filter = 1
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "CBPASTE_EXPORT_NICKNAMES"
+text = "CBPASTE_EXPORT_ATTRIBUTES"
 align = 2
 script = ExtResource( 6 )
 
-[node name="IncludeNicknamesInput" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/InputContainer" index="3" instance=ExtResource( 5 )]
+[node name="IncludeAttributesInput" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/InputContainer" index="3" instance=ExtResource( 5 )]
 margin_left = 454.0
 margin_top = 76.0
 margin_right = 586.0
@@ -174,10 +174,30 @@ hint_tooltip = "CBPASTE_EXPORT_HINT_NICKNAMES"
 values = [ true, false ]
 value_labels = [ "UI_BUTTON_YES", "UI_BUTTON_NO" ]
 
-[node name="Label4" type="Label" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/InputContainer" index="4"]
+[node name="Label6" type="Label" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/InputContainer" index="4"]
 margin_top = 152.0
 margin_right = 438.0
 margin_bottom = 212.0
+hint_tooltip = "CBPASTE_EXPORT_HINT_NICKNAMES"
+mouse_filter = 1
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "CBPASTE_EXPORT_NICKNAMES"
+align = 2
+script = ExtResource( 6 )
+
+[node name="IncludeNicknamesInput" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/InputContainer" index="5" instance=ExtResource( 5 )]
+margin_left = 454.0
+margin_top = 152.0
+margin_right = 586.0
+margin_bottom = 212.0
+hint_tooltip = "CBPASTE_EXPORT_HINT_NICKNAMES"
+values = [ true, false ]
+value_labels = [ "UI_BUTTON_YES", "UI_BUTTON_NO" ]
+
+[node name="Label4" type="Label" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/InputContainer" index="6"]
+margin_top = 228.0
+margin_right = 438.0
+margin_bottom = 288.0
 hint_tooltip = "CBPASTE_EXPORT_HINT_GRADE"
 mouse_filter = 1
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -185,19 +205,19 @@ text = "CBPASTE_EXPORT_GRADE"
 align = 2
 script = ExtResource( 6 )
 
-[node name="IncludeGradeInput" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/InputContainer" index="5" instance=ExtResource( 5 )]
+[node name="IncludeGradeInput" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/InputContainer" index="7" instance=ExtResource( 5 )]
 margin_left = 454.0
-margin_top = 152.0
+margin_top = 228.0
 margin_right = 586.0
-margin_bottom = 212.0
+margin_bottom = 288.0
 hint_tooltip = "CBPASTE_EXPORT_HINT_GRADE"
 values = [ true, false ]
 value_labels = [ "UI_BUTTON_YES", "UI_BUTTON_NO" ]
 
-[node name="Label5" type="Label" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/InputContainer" index="6"]
-margin_top = 228.0
+[node name="Label5" type="Label" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/InputContainer" index="8"]
+margin_top = 304.0
 margin_right = 438.0
-margin_bottom = 288.0
+margin_bottom = 364.0
 hint_tooltip = "CBPASTE_EXPORT_HINT_SKIP_EMPTY"
 mouse_filter = 1
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -208,11 +228,11 @@ __meta__ = {
 "_editor_description_": ""
 }
 
-[node name="SkipEmptyInput" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/InputContainer" index="7" instance=ExtResource( 5 )]
+[node name="SkipEmptyInput" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/InputContainer" index="9" instance=ExtResource( 5 )]
 margin_left = 454.0
-margin_top = 228.0
+margin_top = 304.0
 margin_right = 586.0
-margin_bottom = 288.0
+margin_bottom = 364.0
 hint_tooltip = "CBPASTE_EXPORT_HINT_SKIP_EMPTY"
 __meta__ = {
 "_editor_description_": ""
@@ -221,25 +241,25 @@ values = [ true, false ]
 value_labels = [ "UI_BUTTON_YES", "UI_BUTTON_NO" ]
 
 [node name="HintLabel" type="Label" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer" index="1"]
-margin_top = 320.0
+margin_top = 396.0
 margin_right = 586.0
-margin_bottom = 530.0
+margin_bottom = 606.0
 rect_min_size = Vector2( 0, 210 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = ExtResource( 9 )
 autowrap = true
 
 [node name="ProgressLabel" type="Label" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer" index="1"]
-margin_top = 644.0
+margin_top = 720.0
 margin_right = 618.0
-margin_bottom = 704.0
+margin_bottom = 780.0
 align = 1
 
 [node name="Panel" type="Panel" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer" index="1"]
 margin_left = 658.0
-margin_right = 1358.0
+margin_right = 1658.0
 margin_bottom = 886.0
-rect_min_size = Vector2( 700, 0 )
+rect_min_size = Vector2( 1000, 0 )
 custom_styles/panel = SubResource( 5 )
 
 [node name="MarginContainer" type="MarginContainer" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/Panel" index="0"]
@@ -253,9 +273,10 @@ custom_constants/margin_bottom = 20
 [node name="PastePreview" type="TextEdit" parent="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/Panel/MarginContainer" index="0"]
 margin_left = 28.0
 margin_top = 20.0
-margin_right = 672.0
+margin_right = 972.0
 margin_bottom = 866.0
 focus_mode = 0
+custom_fonts/font = ExtResource( 9 )
 readonly = true
 context_menu_enabled = false
 shortcut_keys_enabled = false
@@ -296,6 +317,7 @@ stream = ExtResource( 12 )
 bus = "SoundEffects"
 
 [connection signal="value_changed" from="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/InputContainer/FormattingInput" to="." method="_on_FormattingInput_value_changed"]
+[connection signal="value_changed" from="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/InputContainer/IncludeAttributesInput" to="." method="_on_IncludeAttributesInput_value_changed"]
 [connection signal="value_changed" from="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/InputContainer/IncludeNicknamesInput" to="." method="_on_IncludeNicknamesInput_value_changed"]
 [connection signal="value_changed" from="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/InputContainer/IncludeGradeInput" to="." method="_on_IncludeGradeInput_value_changed"]
 [connection signal="value_changed" from="Scroller/OverscanMarginContainer/MarginContainer/HBoxContainer/VBoxContainer/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/InputContainer/SkipEmptyInput" to="." method="_on_SkipEmptyInput_value_changed"]

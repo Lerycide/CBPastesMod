@@ -45,6 +45,7 @@ static func get_code(block:String)->String:
 func _on_ExportButton_pressed():
 	var export_menu = load("res://mods/cbpastes/menus/PasteExportMenu.tscn").instance()
 	MenuHelper.add_child(export_menu)
+	export_menu.characters = characters
 	yield (export_menu.run_menu(), "completed")
 	MenuHelper.remove_child(export_menu)
 	export_menu.queue_free()

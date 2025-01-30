@@ -17,6 +17,8 @@ const PATCHES = {
 	"input_mapped_button": preload("res://mods/cbpastes/patches/InputMappedButtonPatch.gd"),
 }
 
+var import_errors: int = 0
+
 func init_content():
 	for patch_script in PATCHES.values():
 		patch_script.patch()
@@ -28,6 +30,7 @@ func init_content():
 			"args":[],
 			"target":[self, "import_paste"]
 		})
+
 
 func create_paste_dir():
 	var directory = Directory.new()
@@ -52,16 +55,21 @@ func _on_node_added(node: Node):
 func import_paste():
 	Console.toggleConsole()
 	WorldSystem.push_flags(0)
+	import_errors = 0
 	
 	var menu = IMPORT_PASTE_MENU.instance()
 	MenuHelper.add_child(menu)
 	var result = yield (menu.run_menu(), "completed")
+	
 	if result != null:
 		var tapes:Array = PasteParser.import_pastes(result)
+		if import_errors > 0:
+			yield (GlobalMessageDialog.show_message(Loc.trf("CBPASTE_IMPORT_ERROR", [import_errors]), true, true), "completed")
 		var can_replace_party:bool = tapes.size() > 0 and tapes.size() <= 6
 		if can_replace_party:
 			yield (GlobalMessageDialog.show_message(Loc.tr("CBPASTE_IMPORT_SWAP_PARTY_CONFIRM"), false, true), "completed")
 			var choice:int = yield (GlobalMenuDialog.show_menu([Loc.tr("UI_BUTTON_YES"), Loc.tr("UI_BUTTON_NO")], 0), "completed")
+			GlobalMessageDialog.hide()
 			if choice == 0:
 				replace_party_tapes(tapes)
 				GlobalMessageDialog.message_dialog.audio = SUCCESS_AUDIO

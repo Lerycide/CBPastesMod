@@ -3,6 +3,7 @@ extends "res://menus/BaseMenu.gd"
 const Parser = preload("res://mods/cbpastes/scripts/PasteParser.gd")
 
 onready var formatting = find_node("FormattingInput")
+onready var include_attributes = find_node("IncludeAttributesInput")
 onready var include_nicknames = find_node("IncludeNicknamesInput")
 onready var include_grade = find_node("IncludeGradeInput")
 onready var skip_empty = find_node("SkipEmptyInput")
@@ -124,4 +125,9 @@ func _on_IncludeGradeInput_value_changed(value, index):
 
 func _on_SkipEmptyInput_value_changed(value, index):
 	args.skip_empty = value
+	update_display()
+
+
+func _on_IncludeAttributesInput_value_changed(value, index):
+	args.include_attributes = value
 	update_display()

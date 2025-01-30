@@ -4,6 +4,7 @@ const Parser = preload("res://mods/cbpastes/scripts/PasteParser.gd")
 
 onready var export_type = find_node("ExportTypeInput")
 onready var formatting = find_node("FormattingInput")
+onready var include_attributes = find_node("IncludeAttributesInput")
 onready var include_nicknames = find_node("IncludeNicknamesInput")
 onready var include_grade = find_node("IncludeGradeInput")
 onready var skip_empty = find_node("SkipEmptyInput")
@@ -13,6 +14,7 @@ onready var progress_label = find_node("ProgressLabel")
 onready var hint_label = find_node("HintLabel")
 
 var running: bool = false
+var characters:Array
 
 func _ready():
 	for control in input_container.get_children():
@@ -41,15 +43,20 @@ func _on_AcceptButton_pressed():
 	var args:Dictionary = {}
 	args.export_party = export_type.selected_value
 	args.format = formatting.selected_value
+	args.include_attributes = include_attributes.selected_value
 	args.include_nickname = include_nicknames.selected_value
 	args.include_grade = include_grade.selected_value
 	args.skip_empty = skip_empty.selected_value
 
 	var tapes:Array = []
 	if args.export_party:
-		tapes = SaveState.party.player.tapes.duplicate()
+		assert (characters.size() > 0)
+		tapes = characters[0].tapes.duplicate()
+		#tapes = SaveState.party.player.tapes.duplicate()
 		# puts current partner tape as second in the list
-		tapes.insert(1, SaveState.party.partner.tapes[0])
+		if characters.size() > 1:
+			tapes.insert(1, characters[1].tapes[0])
+		#tapes.insert(1, SaveState.party.partner.tapes[0])
 	else:
 		tapes = SaveState.tape_collection.tapes_by_name.duplicate()
 		var sorter = Sorter.new()
