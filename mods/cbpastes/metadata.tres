@@ -7,8 +7,8 @@
 script = ExtResource( 1 )
 id = "cb_pastes"
 name = "CB Pastes"
-version_code = 4
-version_string = "0.1.4"
+version_code = 6
+version_string = "0.1.7"
 author = "Lerycide"
 save_file_format_tag = ""
 save_file_format_tag_version = 0
