@@ -116,8 +116,10 @@ rect_pivot_offset = Vector2( 1327.65, 14 )
 custom_constants/separation = 32
 
 [node name="InputContainer" type="GridContainer" parent="Scroller/OverscanMarginContainer/MarginContainer/VBoxContainer2/VBoxContainer/PanelContainer2/MarginContainer/VBoxContainer" index="0"]
-margin_right = 768.0
+margin_left = 91.0
+margin_right = 677.0
 margin_bottom = 440.0
+size_flags_horizontal = 4
 custom_constants/vseparation = 16
 custom_constants/hseparation = 16
 columns = 2
