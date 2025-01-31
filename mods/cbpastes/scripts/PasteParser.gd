@@ -31,14 +31,30 @@ const COLORS = {
 
 
 const HTML_HEAD = """<!DOCTYPE html>
-<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tape Export</title>
-<style>body {font-family: "Verdana", sans-serif;}</style>
+<style>
+	body {
+		font-family: "Verdana", sans-serif;
+	}
+	table {
+		width: auto;
+		border-spacing: 0 0;
+		margin: 0;
+	}
+	td {
+		padding: 0;
+		border: none;
+		text-align: left;
+	}
+	td + td {
+		padding-left: 40px;
+	}
+</style>
 </head>
-</body>"""
+<body>"""
 
 const HTML_FOOT = """
 </body>
@@ -116,6 +132,11 @@ static func _export_paste(form:MonsterForm, type_default:ElementalType, type_ove
 		var fallback_type = type_override if type_override else type_default
 		output_strings.push_back(fancy_format_move(move, fallback_type, args))
 
+	if args.get("include_attributes", true):
+		output_strings.push_back("<tr style='height: 19px;'><td colspan='2'> </td></tr>")
+	elif args.get("format", "") == "html":
+		output_strings.push_back("<br>\n")
+
 	TranslationServer.set_locale(locale)
 	return "\n".join(output_strings)
 
@@ -130,6 +151,8 @@ static func fancy_format_move(move:BattleMove, type:ElementalType, args:Dictiona
 			"bbcode":
 				return output
 			"html":
+				if args.get("include_attributes", true):
+					return "<tr><td>%s</td></tr>" % sanitize_to_html(output)
 				return "<div>%s</div>" % sanitize_to_html(output)
 			_:
 				return output
@@ -149,12 +172,11 @@ static func fancy_format_move(move:BattleMove, type:ElementalType, args:Dictiona
 	if args.get("include_attributes", true):
 		match args.get("format", ""):
 			"bbcode":
-				return "[color=%s]%s[/color]\n\t%s" % [COLORS[id], output, attributes_text]
+				return "[color=%s]%s[/color]\n    %s" % [COLORS[id], output, attributes_text]
 			"markdown":
 				return "%s\n\t%s" % [output, attributes_text]
 			"html":
-				return "<div style='color: %s;'>%s<br><span style='color: black;'>&nbsp;&nbsp;&nbsp;&nbsp;%s</span></div>" % [COLORS[id], output, attributes_text]
-				#return "<div style='color: %s;'>%s<br><span style='color: black; margin-left: 40px;'>%s</span></div>" % [COLORS[id], output, attributes_text]
+				return "<tr><td style='color: %s;'>%s</td><td>%s</td></tr>" % [COLORS[id], output, attributes_text]
 			_:
 				return "%s %s" % [output, attributes_text]
 	else:
@@ -208,7 +230,6 @@ static func string_format_attr_value(value:int, is_empty:bool) -> String:
 	return str(value)
 
 
-
 static func create_data_from_attribute(attribute:StickerAttribute) -> Dictionary:
 	var internal_name:String = Datatables.get_db_key(attribute.template_path)
 	var is_empty:bool = false
@@ -246,6 +267,7 @@ static func get_status_name(status:StatusEffect) -> String:
 	status_name = status_name.replace("-", "").replace(" ", "")
 	return status_name
 
+
 # used for formattng the header (species name + bootleg type)
 static func assign_header(species_name:String, type_name:String, args:Dictionary = {}) -> String:
 	var output:String = species_name
@@ -254,11 +276,17 @@ static func assign_header(species_name:String, type_name:String, args:Dictionary
 			"bbcode":
 				output = "%s ([color=%s]%s[/color])" % [output, COLORS[type_name.to_lower()], type_name]
 			"html":
-				output = "<div>%s (<span style='color: %s;'>%s</span>)</div>" % [output, COLORS[type_name.to_lower()], type_name]
+				if args.get("include_attributes", true):
+					output = "<tr><td colspan='2'>%s (<span style='color: %s;'>%s</span>)</td></tr>" % [output, COLORS[type_name.to_lower()], type_name]
+				else:
+					output = "<div>%s (<span style='color: %s;'>%s</span>)</div>" % [output, COLORS[type_name.to_lower()], type_name]
 			_:
 				output = "%s (%s)" % [output, type_name]
 	elif type_name == "" and args.get("format", "") == "html":
-		output = "<div>%s</div>" % output
+		if args.get("include_attributes", true):
+			output = "<tr><td colspan='2'>%s</td></tr>" % output
+		else:
+			output = "<div>%s</div>" % output
 	return output
 
 
@@ -270,7 +298,10 @@ static func assign_misc(identifier:String, text:String, args:Dictionary = {}, ou
 		"bbcode":
 			output = "[color=%s]%s[/color]"	% [COLORS["misc"], output]
 		"html":
-			output = "<div style='color: %s;'>%s</div>" % [COLORS["misc"], output]
+			if args.get("include_attributes", true):
+				output = "<tr><td colspan='2' style='color: %s;'>%s</td></tr>" % [COLORS["misc"], output]
+			else:
+				output = "<div style='color: %s;'>%s</div>" % [COLORS["misc"], output]
 	return output
 
 
@@ -303,12 +334,11 @@ static func import_paste(paste:String, check_legality:bool = true) -> MonsterTap
 	# reads off header for monster name, type (optional)
 	var name_regex = RegEx.new()
 	var name_string = paste.split("\n")[0]
-	#name_regex.compile("^(\\w[\\w _-]*?(?!\\w*:)?) *(?:\\((\\w+?)\\))? *$")
-	#name_regex.compile("^(.*?)\\s*(?:\\((.+?)\\))?\\s*$")
-	name_regex.compile("^(\\w[\\w _-]*?) *(?:\\((\\w*?)\\))? *$")
+	name_regex.compile("^(\\w[\\w _-]*?)\\s*(?:\\((\\w*?)\\))? *$")
 	var name_result = name_regex.search(name_string)
 	if not name_result:
-		push_error("No species recognized in the first line of the paste. Check if this is a formatting error.")
+		push_error("No species recognized in the first line of the paste %s" % name_string)
+		report_import_error()
 		return null
 	
 	var species_name = reduce_spaces(name_result.strings[1])
@@ -316,7 +346,8 @@ static func import_paste(paste:String, check_legality:bool = true) -> MonsterTap
 	
 	var form = MonsterForms.get_from_key(species_name, false)
 	if not form:
-		push_error("No species recognized in the first line of the paste. Check if this is a formatting error.")
+		push_error("No species recognized in the first line of the paste %s" % name_string)
+		report_import_error()
 		return null
 
 	tape.form = form
@@ -324,8 +355,8 @@ static func import_paste(paste:String, check_legality:bool = true) -> MonsterTap
 		var type_id:String = name_result.strings[2].to_lower()
 		var types = Datatables.load("res://data/elemental_types/").table
 		if type_id != "" and not types.has(type_id):
-			report_import_error()
 			push_warning("Invalid bootleg type %s" % name_result.strings[2])
+			report_import_error()
 		if types.has(type_id):
 			tape.type_override = [types[type_id]]
 
@@ -350,12 +381,10 @@ static func import_paste(paste:String, check_legality:bool = true) -> MonsterTap
 
 	# sets the tape's moves
 	var moves_regex = RegEx.new()
-	moves_regex.compile("(?m)^(?:- *)(\\w[\\w-]+(?: +\\w+)*)\\s*(?:\\[([\\w+][^|]*?)(?: *?\\| *?([\\w+][^|]*?)(?: *?\\| *?([\\w+][^|]*?) *?)?)?\\])?$")
-	#moves_regex.compile("(?m)^(?:- *)(\\w[\\w-]+(?: \\w+)*)(?: \\[([\\w+][^|]*?)(?: *?\\| *?([\\w+][^|]*?)(?: *?\\| *?([\\w+][^|]*?) *?)?)?\\])?$")
-	#moves_regex.compile("(?m)^(?:- *)(.*?)(?:\\s*)$")
+	moves_regex.compile("(?m)^(?:- *)(\\w[\\w-]+(?: +\\w+)*)\\s*(?:\\[\\s*([\\w+][^|]*?)(?: *?\\|\\s*?([\\w+][^|]*?)(?: *?\\|\\s*?([\\w+][^|]*?)\\s*?)?)?\\])?$")
 	var moves_results = moves_regex.search_all(paste)
 	if moves_results:
-		tape.stickers = generate_movesets(moves_results, tape)
+		tape.stickers = generate_movesets(moves_results, tape, check_legality)
 	if check_legality:
 		var imported_stickers_size = tape.stickers.size()
 		tape.fix_slot_overflow(true)
@@ -371,7 +400,7 @@ static func import_paste(paste:String, check_legality:bool = true) -> MonsterTap
 	return tape
 
 
-static func generate_movesets(moves_match_array:Array, tape:MonsterTape)->Array:
+static func generate_movesets(moves_match_array:Array, tape:MonsterTape, check_legality:bool)->Array:
 	if not tape:
 		return []
 	
@@ -390,7 +419,7 @@ static func generate_movesets(moves_match_array:Array, tape:MonsterTape)->Array:
 			continue
 		var move = BattleMoves.by_id[move_name]
 		if not BattleMoves.can_be_sticker(move):
-			push_warning("Move %s does not match any move" % move_name)
+			push_warning("Move %s cannot exist as a sticker" % move_name)
 			report_import_error()
 			continue
 		var sticker = StickerItem.new()
@@ -400,7 +429,7 @@ static func generate_movesets(moves_match_array:Array, tape:MonsterTape)->Array:
 			var attributes:Array = move_match.strings.slice(2, move_match.strings.size() - 1)
 			var attributes_list:Array = []
 			for attribute in attributes:
-				var attr = generate_attribute(move, attribute)
+				var attr = generate_attribute(move, attribute, check_legality)
 				if attr != null:
 					attributes_list.push_back(attr)
 			sticker.attributes = attributes_list
@@ -409,7 +438,7 @@ static func generate_movesets(moves_match_array:Array, tape:MonsterTape)->Array:
 	return moves_override_list
 
 
-static func generate_attribute(move:BattleMove, attribute_string:String):
+static func generate_attribute(move:BattleMove, attribute_string:String, check_legality:bool):
 	# parses the given: AttributeKey Modifier Number
 	# assumes that the regex match has already been sliced
 	var attr_string_array:Array = attribute_string.split(" ", false)
@@ -430,8 +459,7 @@ static func generate_attribute(move:BattleMove, attribute_string:String):
 			push_warning("Attribute %s is not compatible with move" % [data.attribute_name, Loc.tr(move.get_name())])
 			report_import_error()
 			return null
-		attribute.generate(move, Random.new())
-		set_value_attribute(attribute, data.get("value", 0))
+		set_value_attribute(attribute, data.get("value", 0), check_legality)
 
 		# special case handling for buff and debuff attributes
 		if attribute.get("buffs") != null:
@@ -493,8 +521,7 @@ static func generate_attribute(move:BattleMove, attribute_string:String):
 				push_warning("Attribute %s is not compatible with move" % [data.attribute_name, Loc.tr(move.get_name())])
 				report_import_error()
 				return null
-			attribute.generate(move, Random.new())
-			set_value_attribute(attribute, data.get("value", 0))
+			set_value_attribute(attribute, data.get("value", 0), check_legality)
 			return attribute
 
 		result = result[data.modifier_name]		
@@ -509,8 +536,7 @@ static func generate_attribute(move:BattleMove, attribute_string:String):
 				push_warning("Attribute %s is not compatible with move" % [data.attribute_name, Loc.tr(move.get_name())])
 				report_import_error()
 				return null
-			attribute.generate(move, Random.new())
-			set_value_attribute(attribute, data.get("value", 0))
+			set_value_attribute(attribute, data.get("value", 0), check_legality)
 			return attribute
 		elif result is StickerAttribute:
 			attribute = result.instance()
@@ -518,10 +544,10 @@ static func generate_attribute(move:BattleMove, attribute_string:String):
 				push_warning("Attribute %s is not compatible with move" % [data.attribute_name, Loc.tr(move.get_name())])
 				report_import_error()
 				return null
-			attribute.generate(move, Random.new())
-			set_value_attribute(attribute, data.get("value", 0))
+			set_value_attribute(attribute, data.get("value", 0), check_legality)
 			return attribute
 	return attribute
+
 
 static func create_attribute_data(string_array:Array, output := {}) -> Dictionary:
 	assert (string_array.size() > 0)
@@ -547,17 +573,22 @@ static func create_attribute_data(string_array:Array, output := {}) -> Dictionar
 	return output
 
 
-static func set_value_attribute(attribute:StickerAttribute, value:int):
+static func set_value_attribute(attribute:StickerAttribute, value:int, check_legality:bool):
 	if "stat_value" in attribute:
 		if value == 0:
 			attribute.stat_value = attribute.stat_value_max
-		else:
+		elif check_legality:
 			attribute.stat_value = int(clamp(value, attribute.stat_value_min, attribute.stat_value_max ))
+		else:
+			attribute.stat_value = value
 	elif "chance" in attribute:
 		if value == 0:
 			attribute.chance = attribute.chance_max
-		else:
+		elif check_legality:
 			attribute.chance = int(clamp(value, attribute.chance_min, attribute.chance_max))
+		else:
+			attribute.chance = value
+
 
 static func get_value_attribute(attribute:StickerAttribute) -> int:
 	if "stat_value" in attribute:
@@ -566,17 +597,20 @@ static func get_value_attribute(attribute:StickerAttribute) -> int:
 		return attribute.chance
 	return -1
 
+
 static func is_modifier_key(value:String) -> bool:
 	# returns false if it's a number-type argument like 20 or 20+
 	if "+" in value or "%" in value:
 		return false
 	return value.to_int() == 0
 
+
 static func is_empty_slot_scaling(value:String) -> bool:
 	# returns true if it's the per empty slot variant
 	if is_modifier_key(value):
 		return false
 	return "+" in value
+
 
 static func string_get_attribute_value(string_value:String) -> int:
 	# returns the raw value of the number-type argument itself
@@ -585,10 +619,12 @@ static func string_get_attribute_value(string_value:String) -> int:
 	string_value = string_value.replace("%", "").trim_suffix("+")
 	return string_value.to_int()
 
+
 static func reduce_spaces(name:String) -> String:
 	while "  " in name:
 		name = name.replace("  ", " ")
 	return name
+
 
 static func format_move(move_name:String) -> String:
 	# properly formats the move into a usable key string
@@ -603,7 +639,8 @@ static func format_attribute(attr_name:String):
 	if attr_name in Conversions.ATTRIBUTE_NAME_CONVERSIONS:
 		attr_name = Conversions.ATTRIBUTE_NAME_CONVERSIONS[attr_name]
 	return attr_name
-	
+
+
 static func sanitize_to_html(text:String) -> String:
 	return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&apos;")
 
@@ -613,7 +650,8 @@ static func _format_html_body(contents:Array) -> String:
 
 
 static func _format_html_separator(contents:Array) -> String:
-	return HTML_TAPE_SEPARATOR.join(contents)
+	return "\n".join(contents)
+	#return HTML_TAPE_SEPARATOR.join(contents)
 
 
 static func _format_markdown(contents:Array) -> String:
@@ -638,6 +676,7 @@ static func export_to_markdown(contents:Array, path:String = "user://tape_export
 	file.close()
 	return
 
+
 static func export_to_text(contents:Array, path:String = "user://tape_export.md"):
 	var file = File.new()
 	file.open(path, File.WRITE)
@@ -645,7 +684,7 @@ static func export_to_text(contents:Array, path:String = "user://tape_export.md"
 	file.close()
 	return
 
+
 static func report_import_error():
 	# keeps tally of importing errors to inform the user later on
 	DLC.mods_by_id["cb_pastes"].import_errors += 1
-
