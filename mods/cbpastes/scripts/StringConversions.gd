@@ -66,7 +66,7 @@ const MOVE_NAME_CONVERSIONS: Dictionary = {
 	"trapjaw": "trap_jaw",
 	"trip_wire": "tripwire",
 	"twoheads": "two_heads",
-	"tower_defense": "tower_defence",
+	"tower_defence": "tower_defense",
 	"water_works": "waterworks",
 	"wonderful_seven": "wonderful_7",
 	"w7": "wonderful_7",
@@ -259,6 +259,7 @@ const ATTRIBUTE_NAME_CONVERSIONS: Dictionary = {
 	"1slot": "+slot",
 	"prio": "priority",
 	"prioritychance": "priority",
+	"critadv": "critadvantage",
 	"crittypeadvantage": "critadvantage",
 	"typeadvantage": "critadvantage",
 	"typeadvantagecrit": "critadvantage",
@@ -410,6 +411,8 @@ const STATUSES: Dictionary = {
 
 const STATUS_CONVERSIONS: Dictionary = {
 	"cottonon": "cottonedon",
+	"parry": "parrystance",
+	"lockon": "lockedon",
 	"accuracyup": "accup",
 	"evasionup": "evasup",
 	"evaup": "evasup",
