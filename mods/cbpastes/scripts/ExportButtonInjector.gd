@@ -15,6 +15,7 @@ static func inject_export_button(node:Node):
 	if not export_button.is_connected("pressed", node, "_on_ExportButton_pressed"):
 		export_button.connect("pressed", node, "_on_ExportButton_pressed")
 
+
 static func inject_basic_export_button(node:Node):
 	if has_export_button("SimpleExportButton"):
 		return
@@ -42,6 +43,7 @@ static func stylize_button(button:InputMappedButton):
 	button.set("custom_styles/focus", StyleBoxEmpty.new())
 	button.set("custom_styles/disabled", StyleBoxEmpty.new())
 	button.set("custom_styles/normal", StyleBoxEmpty.new())
+
 
 static func has_export_button(key:String) -> bool:
 	var result = MenuHelper.find_node(key, true, false)

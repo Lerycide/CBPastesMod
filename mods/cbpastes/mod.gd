@@ -19,6 +19,7 @@ const PATCHES = {
 
 var import_errors: int = 0
 
+
 func init_content():
 	for patch_script in PATCHES.values():
 		patch_script.patch()
@@ -40,6 +41,7 @@ func create_paste_dir():
 	if err != OK:
 		push_error("Unable to create directory at %s" % PATH_PREFIX)
 
+
 func _on_node_added(node: Node):
 	var node_name = node.name
 	if node_name == "PartyMenu":
@@ -51,6 +53,7 @@ func _on_node_added(node: Node):
 	if node_name == "PartyTapeUI":
 		ExportButtonInjector.inject_basic_export_button(node)
 		return
+
 
 func import_paste():
 	Console.toggleConsole()
@@ -90,6 +93,7 @@ func import_paste():
 	WorldSystem.pop_flags()
 	menu.queue_free()
 
+
 func replace_party_tapes(tapes: Array):
 	assert (tapes.size() <= 6)
 	var current_tapes: Array = _get_party_tapes()
@@ -102,7 +106,8 @@ func replace_party_tapes(tapes: Array):
 			current_tapes[i] = tapes[i]
 		print("Imported %s" % tapes[i].get_name())
 	_set_party_tapes(current_tapes)
-	
+
+
 func _get_party_tapes(output := []) -> Array:
 	var party = SaveState.party
 	
@@ -113,6 +118,7 @@ func _get_party_tapes(output := []) -> Array:
 		var partner_tape = output.pop_back()
 		output.insert(1, partner_tape)
 	return output
+
 
 func _set_party_tapes(tapes: Array):
 	if SaveState.party.characters.size() > 1:

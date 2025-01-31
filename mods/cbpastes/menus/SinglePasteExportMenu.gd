@@ -113,21 +113,21 @@ func _on_FormattingInput_value_changed(value, index):
 	update_display()
 
 
-func _on_IncludeNicknamesInput_value_changed(value, index):
+func _on_IncludeNicknamesInput_value_changed(value, _index):
 	args.include_nickname = value
 	update_display()
 
 
-func _on_IncludeGradeInput_value_changed(value, index):
+func _on_IncludeGradeInput_value_changed(value, _index):
 	args.include_grade = value
 	update_display()
 
 
-func _on_SkipEmptyInput_value_changed(value, index):
+func _on_SkipEmptyInput_value_changed(value, _index):
 	args.skip_empty = value
 	update_display()
 
 
-func _on_IncludeAttributesInput_value_changed(value, index):
+func _on_IncludeAttributesInput_value_changed(value, _index):
 	args.include_attributes = value
 	update_display()
