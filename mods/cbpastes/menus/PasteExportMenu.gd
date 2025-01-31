@@ -66,12 +66,16 @@ func _on_AcceptButton_pressed():
 	
 	var paste_array:Array = []
 	
+	var i:int = 0
+	var batch_size:int = 10
 	
-	var i = 0
+	if args.include_attributes:
+		batch_size = 5
+	
 	for tape in tapes:
 		paste_array.push_back(Parser.export_paste(tape, args))
 		i += 1
-		if i % 10 == 0:
+		if i % batch_size == 0:
 			yield (Co.wait_frames(1), "completed")
 			progress_label.text = Loc.tr("CBPASTE_EXPORT_PROGRESS_EXPORTING") + " %s / %s" % [i, tapes.size()]
 
@@ -79,6 +83,9 @@ func _on_AcceptButton_pressed():
 
 	match args.format:
 		"html":
+			if args.include_attributes:
+				paste_array.push_front("<table>")
+				paste_array.push_back("<table>")
 			Parser.export_to_html(paste_array, path)
 			progress_label.text = "CBPASTE_EXPORT_PROGRESS_DONE"
 			OS.shell_open(ProjectSettings.globalize_path(path))
