@@ -132,7 +132,7 @@ static func _export_paste(form:MonsterForm, type_default:ElementalType, type_ove
 		var fallback_type = type_override if type_override else type_default
 		output_strings.push_back(fancy_format_move(move, fallback_type, args))
 
-	if args.get("include_attributes", true):
+	if args.get("include_attributes", true) and args.get("format", "") == "html":
 		output_strings.push_back("<tr style='height: 19px;'><td colspan='2'> </td></tr>")
 	elif args.get("format", "") == "html":
 		output_strings.push_back("<br>\n")
