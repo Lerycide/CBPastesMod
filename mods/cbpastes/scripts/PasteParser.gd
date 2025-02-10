@@ -169,7 +169,7 @@ static func fancy_format_move(move:BattleMove, type:ElementalType, args:Dictiona
 	elif type:
 		id = type.id
 	
-	if args.get("include_attributes", true):
+	if args.get("include_attributes", true) and attributes_text != "":
 		match args.get("format", ""):
 			"bbcode":
 				return "[color=%s]%s[/color]\n    %s" % [COLORS[id], output, attributes_text]
@@ -184,6 +184,8 @@ static func fancy_format_move(move:BattleMove, type:ElementalType, args:Dictiona
 			"bbcode":
 				return "[color=%s]%s[/color]" % [COLORS[id], output]
 			"html":
+				if args.get("include_attributes", true):
+					return "<tr><td style='color: %s;'>%s</td><td></td></tr>" % [COLORS[id], output]
 				return "<div style='color: %s;'>%s</div>" % [COLORS[id], output]
 			_:
 				pass
