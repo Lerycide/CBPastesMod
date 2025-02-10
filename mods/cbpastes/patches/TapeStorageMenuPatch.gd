@@ -19,12 +19,11 @@ static func patch():
 
 	# adds proper signal for pressing the button
 	code_lines.push_back(get_code("export_button_pressed"))
-	code_lines.push_back(get_code("get_export_tape"))
 	
 	patched_script.source_code = ""
 	for line in code_lines:
 		patched_script.source_code += line + "\n"
-
+	print(patched_script.source_code)
 	var err = patched_script.reload(true)
 	if err != OK:
 		push_error("Failed to patch %s." % script_path)
@@ -36,24 +35,11 @@ static func get_code(block:String)->String:
 	code_blocks["export_button_pressed"] = """
 func _on_ExportButton_pressed():
 	var export_menu = load("res://mods/cbpastes/menus/PasteExportMenu.tscn").instance()
+	export_menu.characters = SaveState.party.characters
 	MenuHelper.add_child(export_menu)
 	yield (export_menu.run_menu(), "completed")
 	MenuHelper.remove_child(export_menu)
 	export_menu.queue_free()
-"""
-
-	code_blocks["get_export_tape"] = """
-func _get_export_tape(current_tape):
-	var export_menu = load("res://mods/cbpastes/menus/PasteExportMenu.tscn").instance()
-	MenuHelper.add_child(export_menu)
-	yield (export_menu.run_menu(), "completed")
-	MenuHelper.remove_child(export_menu)
-	export_menu.queue_free()
-"""
-
-	code_blocks["choose_option_export"] = """
-		elif option == "export_paste":
-			_get_export_tape(current_tape)
 """
 
 	return code_blocks[block]
