@@ -50,13 +50,12 @@ func _on_AcceptButton_pressed():
 
 	var tapes:Array = []
 	if args.export_party:
+		if characters.size() == 0:
+			characters == SaveState.party.characters
 		assert (characters.size() > 0)
 		tapes = characters[0].tapes.duplicate()
-		#tapes = SaveState.party.player.tapes.duplicate()
-		# puts current partner tape as second in the list
 		if characters.size() > 1:
 			tapes.insert(1, characters[1].tapes[0])
-		#tapes.insert(1, SaveState.party.partner.tapes[0])
 	else:
 		tapes = SaveState.tape_collection.tapes_by_name.duplicate()
 		var sorter = Sorter.new()
